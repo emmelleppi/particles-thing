@@ -69,9 +69,7 @@ class CollisionsController {
       if (particle.life >= particle.lifetime) {
         this.collidees.splice(i, 1)
       } else {
-
         this.checkCollisions(particle)
-
       }
     }
     // checks tutt e cos1

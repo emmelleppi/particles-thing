@@ -107,7 +107,11 @@ class Rect {
   }
 
   draw() {
-    this.particles.map(particle => particle.draw())
+    let i
+    const l = this.particles.length
+    for (i = 0; i < l; i++) {
+      this.particles[i].draw()
+    }
   }
 }
 

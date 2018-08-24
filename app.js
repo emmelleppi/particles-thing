@@ -4,7 +4,7 @@ import { DrawRect, DrawCannon, DrawExplosion } from './DrawingTools.js'
 class App {
 
   constructor() {
-    this.active = 'explosion'
+    this.active = 'cannon'
 
     this.emitters = []
 

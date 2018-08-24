@@ -91,7 +91,6 @@ export class Rect {
         ax,
         ay,
         type: this.particleType,
-        sprite: randomMember(['./particle.png', './particle-2.png'])
       }))
       this.time = elapsed
     }

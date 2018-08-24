@@ -1,8 +1,27 @@
+let dir = 1
+function incrementTo(from, to, increment) {
+
+  console.log(from, to, increment, from + (increment * dir))
+
+  const possibleNewFrom = from + (increment * dir)
+
+  if (possibleNewFrom > to || possibleNewFrom <= 0) {
+    dir *= -1
+  }
+
+  return from + (increment * dir)
+
+}
+
 class DrawingTool {
   constructor() {
     this.events = 'mousedown.drawingTool mouseup.drawingTool mousemove.drawingTool'
     $(window).off('.drawingTool')
     $(window).on(this.events, this.handleEvents.bind(this))
+
+    this.active = false
+
+    this.loop()
   }
 
   handleEvents(e) {
@@ -21,6 +40,14 @@ class DrawingTool {
     }
 
     return callback(e)
+  }
+
+  loop() {
+    if (typeof this.update === 'function' && this.active) {
+      this.update()
+      this.draw()
+    }
+    requestAnimationFrame(this.loop.bind(this))
   }
 
 }
@@ -84,6 +111,8 @@ export class DrawCannon extends DrawingTool {
     this.y1 = 0
 
     this.onDraw = callback
+
+    this.angle = 0
   }
 
   handleMouseDown = e => {
@@ -98,7 +127,7 @@ export class DrawCannon extends DrawingTool {
 
   handleMouseUp = (e) => {
     if (this.active && typeof this.onDraw === 'function') {
-      this.onDraw({ ...this })
+      this.onDraw({ ...this, angleVar: this.angle })
     }
 
     this.active = false
@@ -119,6 +148,17 @@ export class DrawCannon extends DrawingTool {
     ctx.stroke()
     ctx.closePath()
 
+    // angle
+
+    const angle = Math.atan2(this.y1 - this.y0, this.x1 - this.x0)
+
+    ctx.beginPath()
+    ctx.moveTo(this.x0, this.y0)
+    ctx.arc(this.x0, this.y0, 30, angle - this.angle / 2, angle + this.angle / 2)
+    ctx.lineTo(this.x0, this.y0)
+    ctx.stroke()
+    ctx.closePath()
+
     // draw line
     ctx.beginPath()
     ctx.moveTo(this.x0, this.y0)
@@ -126,6 +166,11 @@ export class DrawCannon extends DrawingTool {
     ctx.strokeStyle = 'red'
     ctx.stroke()
     ctx.closePath()
+  }
+
+  update() {
+    this.angle = incrementTo(this.angle, Math.PI, Math.PI / 45)
+    console.log('yo update cannon', this.angle)
   }
 
 }

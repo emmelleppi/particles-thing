@@ -20,6 +20,13 @@ class App {
     this.emitters.push(new Rect(args))
   }
 
+  handleNewWall = (args) => {
+    const { x0, y0, w, h } = args
+    const newWall = new Wall(x0, y0, w, h)
+    this.walls.push(newWall)
+    collisionController.pushCollider(newWall)
+  }
+
   loop(elapsed) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#121212'
@@ -64,11 +71,17 @@ class App {
         case 'cannon':
           this.drawingTool = new DrawCannon(this.handleNewEmitter.bind(this))
           break
+
         case 'rect':
           this.drawingTool = new DrawRect(this.handleNewEmitter.bind(this))
           break
+
         case 'explosion':
           this.drawingTool = new DrawExplosion(this.handleNewEmitter.bind(this))
+          break
+
+        case 'wall':
+          this.drawingTool = new DrawRect(this.handleNewWall.bind(this))
           break
 
       }
